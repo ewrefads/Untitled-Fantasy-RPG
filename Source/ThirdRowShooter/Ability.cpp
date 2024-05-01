@@ -13,7 +13,10 @@ AAbility::AAbility()
 
 void AAbility::BeginCast()
 {
-	remainingCastTime = castTime;
+	if (remainingCastTime <= 0 && remainingCooldown <= 0) {
+		remainingCastTime = castTime;
+	}
+	
 }
 
 void AAbility::CancelCast()
@@ -24,6 +27,20 @@ void AAbility::CancelCast()
 void AAbility::CancelCooldown()
 {
 	remainingCooldown = 0;
+}
+
+void AAbility::BeginChannel()
+{
+	Cast();
+	remainingchannelTime = channelTime;
+	remainingchannelTickTime = channelTickTime;
+}
+
+void AAbility::CancelChannel()
+{
+	remainingchannelTime = 0;
+	remainingchannelTickTime = 0;
+	remainingCooldown = cooldown;
 }
 
 void AAbility::Cast()
@@ -48,9 +65,28 @@ void AAbility::Tick(float DeltaTime)
 		if (remainingCastTime <= 0)
 		{
 			remainingCooldown = cooldown;
+			if (channelTime > 0) {
+				BeginChannel();
+			}
+			else {
+				Cast();
+			}
+		}
+	}
+	if (remainingchannelTime > 0)
+	{
+		remainingchannelTime -= DeltaTime;
+		if (remainingchannelTickTime > 0)
+		{
+			remainingchannelTickTime -= DeltaTime;
+		}
+		else
+		{
+			remainingchannelTickTime = channelTickTime;
 			Cast();
 		}
 	}
+	
 	if (remainingCooldown > 0)
 	{
 		remainingCooldown -= DeltaTime;
