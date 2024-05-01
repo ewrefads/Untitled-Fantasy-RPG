@@ -18,14 +18,30 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float castTime;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float remainingCastTime = 0;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float cooldown;
+	float cooldown = 1;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float remainingCooldown = 0;
+
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float channelTime = 0;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float remainingchannelTime = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float channelTickTime = 0;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float remainingchannelTickTime = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool movementCancelsAbility = false;
 
 	UFUNCTION(BlueprintCallable)
 	void BeginCast();
@@ -35,6 +51,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CancelCooldown();
+
+	UFUNCTION(BlueprintCallable)
+	void BeginChannel();
+
+	UFUNCTION(BlueprintCallable)
+	void CancelChannel();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Cast();
