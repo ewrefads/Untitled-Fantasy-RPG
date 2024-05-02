@@ -43,6 +43,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool movementCancelsAbility = false;
 
+	
+
 	UFUNCTION(BlueprintCallable)
 	void BeginCast();
 
