@@ -14,6 +14,42 @@ UBasicStatblock::UBasicStatblock()
 }
 
 
+void UBasicStatblock::CalculateDerivedStats()
+{
+	StrengthModifier = Strength / 2 - 5;
+	DexterityModifier = Dexterity / 2 - 5;
+	ConstitutionModifier = Constitution / 2 - 5;
+	IntelligenceModifier = Intelligence / 2 - 5;
+	WisdomModifier = Wisdom / 2 - 5;
+	CharismaModifier = Charisma / 2 - 5;
+	StrengthAttack = StrengthModifier + ProficiencyModifier;
+	DexterityAttack = DexterityModifier + ProficiencyModifier;
+	SpellAttack = IntelligenceModifier + ProficiencyModifier;
+	SpellDC = 8 + SpellAttack + ProficiencyModifier;
+	int healthPrHitDice = 0;
+	switch (hitDiceSize)
+	{
+	case 4:
+		healthPrHitDice = 2;
+		break;
+	case 6:
+		healthPrHitDice = 3;
+	case 8:
+		healthPrHitDice = 4;
+	case 10:
+		healthPrHitDice = 5;
+	case 12:
+		healthPrHitDice = 6;
+	default:
+		healthPrHitDice = 4;
+		break;
+	}
+	maxHealth = healthPrHitDice * numberOfHitDice + ConstitutionModifier * numberOfHitDice;
+	health = maxHealth;
+
+	ArmorClass = 10 + DexterityModifier;
+}
+
 // Called when the game starts
 void UBasicStatblock::BeginPlay()
 {
