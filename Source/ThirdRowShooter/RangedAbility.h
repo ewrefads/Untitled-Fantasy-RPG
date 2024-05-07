@@ -6,7 +6,10 @@
 #include "Ability.h"
 #include "GameFramework/Character.h"
 #include "SpellProjectile.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "RangedAbility.generated.h"
+
 
 
 /**
@@ -30,9 +33,9 @@ public:
 	int damageModifier;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ACharacter* Abilitytarget;
+	ASpellProjectile* spellProjectile;
 
-	virtual void spawnProjectile(int damage);
+	void spawnProjectile(int damage);
 
 	void Cast() override;
 };

@@ -7,10 +7,11 @@
 
 void ARangedAbility::spawnProjectile(int damage)
 {
-	FVector Location(0.0f, 0.0f, 0.0f);
-	FRotator Rotation(0.0f, 0.0f, 0.0f);
-	FActorSpawnParameters SpawnInfo; 
-	GetWorld()->SpawnActor<ASpellProjectile>(Location, Rotation, SpawnInfo)->setTargetAndDamage(Abilitytarget, damage);
+	FVector Location = GetActorLocation();
+	FRotator Rotation = GetActorRotation();
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.Template = spellProjectile;
+	GetWorld()->SpawnActor<ASpellProjectile>(Location, Rotation, SpawnInfo)->setTargetAndDamage(Abilitytarget, damage, 200);
 }
 
 void ARangedAbility::Cast()
