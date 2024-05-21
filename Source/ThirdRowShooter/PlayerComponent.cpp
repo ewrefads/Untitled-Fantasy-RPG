@@ -29,7 +29,7 @@ void UPlayerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	FVector currentLocation = GetOwner()->GetActorLocation();
-	if (currentLocation.Z < 0) {
+	if (currentLocation.Z < -1000) {
 		GetOwner()->SetActorLocation(startPosition);
 	}
 	// ...
