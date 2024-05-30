@@ -3,7 +3,9 @@
 
 #include "TressureChest.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "NiagaraComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraEmitter.h"
 
 #include "GameFramework/Actor.h"
 
@@ -23,10 +25,13 @@ ATressureChest::ATressureChest()
 	//laver topdelen af kisten
 	TopChestMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TopChest"));
 
+	ParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ChestParticles"));
+
 	RootComponent = CollisionComponent;
 
 	BaseChestMesh->SetupAttachment(RootComponent);
 	TopChestMesh->SetupAttachment(BaseChestMesh);
+	ParticleSystem->SetupAttachment(BaseChestMesh);
 
 	
 }
@@ -37,6 +42,14 @@ void ATressureChest::BeginPlay()
 	Super::BeginPlay();
 	//sætter item spawntimeren til en tilfældig værdi i starten af spillet
 	timeToSpawn = FMath::RandRange(minSpawnTime, maxSpawnTime);
+
+	//finder reference til playercharacter
+	//playerPos =  (GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation());
+	
+	
+	//playerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
+	playerCharacter = (GetWorld()->GetFirstPlayerController()->GetPawn());
+	
 }
 
 // Called every frame
@@ -60,6 +73,47 @@ void ATressureChest::Tick(float DeltaTime)
 			timeToSpawn = FMath::RandRange(minSpawnTime, maxSpawnTime);
 		}
 
+	}
+
+	//tilføjer flere partikler til partikkel systemet hvis spilleren er tættere på
+	if (ParticleSystem)
+	{
+		
+		
+			//finder ud af mængden af partikler der skal være baseret på distance mellem spiller og kiste
+			
+			//playerPos = FVector(1,1,1);
+			//FVector chestPosition = FVector(1, 1, 1);;
+			FVector playerPos = playerCharacter->GetActorLocation();
+			FVector chestPosition = GetActorLocation();
+			float Distance = FVector::Distance(chestPosition, playerPos);
+
+			float ClampedValue = FMath::Clamp(Distance/2 - 100, 0.0f, 100.0f);
+
+			if (GEngine)
+			{
+				FString Message = FString::Printf(TEXT("Distance between Vector1 and Vector2: %f"), ClampedValue);
+
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, Message);
+			}
+
+
+			ParticleSystem->SetVariableFloat(TEXT("particleCount"), ClampedValue);
+		
+		// Get the Niagara system from the Niagara component
+		UNiagaraSystem* NiagaraSystem = ParticleSystem->GetAsset();
+		if (NiagaraSystem)
+		{
+			
+
+			//// Get the Niagara component itself
+			//UNiagaraComponent* NiagaraComponent = ParticleSystem->GetNiagaraComponent();
+			//if (NiagaraComponent)
+			//{
+			//	// Set the variable "MyVariable" to change a parameter value
+			//	NiagaraComponent->SetVariableFloat(TEXT("MyVariable"), 5);
+			//}
+		}
 	}
 
 }

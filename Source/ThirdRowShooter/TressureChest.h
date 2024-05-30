@@ -6,6 +6,10 @@
 #include "GameFramework/Actor.h"
 #include "UseableInterface.h"
 #include <Components/BoxComponent.h>
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
+
 
 
 #include "TressureChest.generated.h"
@@ -32,6 +36,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* TopChestMesh;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraComponent* ParticleSystem;
 
 	UPROPERTY(EditAnywhere)
 	FRotator OpenRotation;
@@ -61,6 +68,8 @@ protected:
 	int itemsToSpawn;
 
 	int currentItemsSpawned=0;
+	
+	APawn* playerCharacter;
 
 	virtual void BeginPlay() override;
 
